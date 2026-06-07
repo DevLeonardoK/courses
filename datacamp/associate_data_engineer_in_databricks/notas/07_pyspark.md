@@ -76,3 +76,22 @@ a medida que os dados crescem devemos otimizar para bom funcionamento das pipeli
 ## NumPy (extra)
 numpy = numeric python, trabalhar com matrizes como se fosse valor unico, possui tipo unico
 - 2d = linha x coluna
+
+## Spark Catalog
+API para interagir com o metastore do Spark (tabelas, views, cache)
+```python
+spark.catalog.listTables()
+spark.catalog.cacheTable('table1')
+spark.catalog.isCached('table1')
+spark.catalog.uncacheTable('table1')
+```
+
+## Logging
+```python
+logging.debug("text_df columns: %s", text_df.columns)
+logging.info("table1 is cached: %s", spark.catalog.isCached(tableName="table1"))
+logging.warning("The first row of text_df:\n %s", text_df.first())
+logging.error("Selected columns: %s", text_df.select("id", "word"))
+```
+- `debug` / `info` — não disparam ação no dataframe (lazy)
+- `warning` / `error` com `.first()` ou `.collect()` — disparam execução real

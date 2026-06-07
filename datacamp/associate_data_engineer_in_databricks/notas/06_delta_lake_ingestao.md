@@ -39,3 +39,20 @@ appending data x cdc (change data capture):
 - optimize = comando do delta lake para compactar arquivos menores em arquivos maiores, geralmente combinado com o zorder para relacionar dados fisicos mais proximos e acelerar filtros em colunas especificas
 - partitioned by (ano) - cria subpastas por ano, usado quando a coluna é muito usada nos filtros
 - partition é low cardinality / zorder é high cardinality
+
+## Tabelas Managed x Unmanaged
+- **Unmanaged**: criada com `LOCATION`, aponta para storage externo — Databricks só referencia, não gerencia os dados
+- **Managed**: criada sem `LOCATION` — Databricks armazena fisicamente e é responsável pelos dados
+- `USING DELTA` = usar formato Delta Lake (não é banco, é formato de armazenamento); uma tabela delta é uma pasta com vários arquivos parquet + `_delta_log/`
+- `LOCATION` sobrescreve o storage padrão do metastore
+
+## Views
+- `CREATE VIEW` / `CREATE OR REPLACE VIEW` — útil para consultas muito reutilizadas
+- `CREATE OR REPLACE TEMP VIEW` — existe apenas durante a sessão atual
+
+## PII (Personally Identifiable Information)
+Informação Pessoal Identificável — dados que identificam uma pessoa:
+- Nome completo
+- CPF, RG, Passaporte, CNH
+- E-mail pessoal
+- Telefone
