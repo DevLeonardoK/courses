@@ -95,3 +95,28 @@ logging.error("Selected columns: %s", text_df.select("id", "word"))
 ```
 - `debug` / `info` — não disparam ação no dataframe (lazy)
 - `warning` / `error` com `.first()` ou `.collect()` — disparam execução real
+
+## Transformações de Dados (Spark SQL / PySpark)
+```python
+# filtro com startswith
+df.filter(df["coluna"].startswith("A"))
+
+# preencher nulos
+df_clean = df_clean.na.fill({"Description": "Unknown", "UnitPrice": 0.0})
+
+# remover duplicatas por subconjunto de colunas
+df_clean = df_clean.dropDuplicates(subset=["InvoiceNo", "StockCode", "InvoiceDate"])
+```
+
+## Broadcast Join (detalhado)
+- O problema do join padrão é o **shuffle**: os dados são embaralhados pela rede para serem agrupados, o que é lento
+- **Broadcast join**: copia a tabela menor para cada executor — o join ocorre localmente, sem tráfego de rede
+- Não funciona com tabelas grandes (memória do executor seria insuficiente)
+- O Spark faz **auto broadcast join** automaticamente quando detecta que uma tabela é pequena o suficiente
+- Verificar no `explain()` se foi usado: aparece como `BroadcastHashJoin`
+
+## DLT (Delta Live Tables)
+```python
+@dlt.table(name="bronze")
+```
+- Decorator usado para definir tabelas em pipelines DLT — o Spark gerencia dependências e execução automaticamente
